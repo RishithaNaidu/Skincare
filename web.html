@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essential Glow</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .nav-bar a {
+            text-decoration: none;
+            color: black;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .nav-bar a.button {
+            padding: 8px 16px;
+            border-radius: 5px;
+            background-color: white;
+            color: black;
+        }
+        .logo {
+            font-family: 'Times New Roman', serif;
+            font-size: 36px;
+            font-weight: normal;
+        }
+        .main-content {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+        .main-content img {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            cursor: pointer; /* Add cursor pointer to indicate clickable */
+        }
+        .highlight-image {
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 500px; /* Adjust the height as needed */
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .product {
+            flex: 1 1 calc(25% - 20px); /* Adjust the width as needed */
+            margin: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            text-align: center;
+        }
+        .product img {
+            width: 100%;
+            height: auto;
+        }
+        .product h3 {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .product p {
+            font-size: 14px;
+            color: grey;
+        }
+        .product .price {
+            font-size: 18px;
+            color: black;
+            margin-top: 10px;
+        }
+        .add-to-cart {
+            padding: 5px 10px;
+            background-color: #a566a5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        /* Layout styles */
+        .layout {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            overflow-y: auto;
+        }
+        .layout.active {
+            display: flex;
+        }
+        .layout-products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 90%;
+        }
+        .layout-product {
+            flex: 1 1 calc(25% - 20px); /* Same size as main page products */
+            margin: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+        .layout-product img {
+            width: 100%;
+            height: auto;
+        }
+        .layout-product h3 {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .layout-product p {
+            font-size: 14px;
+            color: grey;
+            margin: 5px 0;
+        }
+        .layout-product .price {
+            font-size: 18px;
+            color: black;
+            margin: 10px 0;
+        }
+        .add-to-cart {
+            padding: 5px 10px;
+            background-color: #030003;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+            width: 80%;
+            max-width: 400px;
+            margin: 5px auto;
+        }
+        .cart-item img {
+            width: 80px;
+            height: auto;
+        }
+        .cart-item span {
+            flex: 1;
+            margin: 0 10px;
+        }
+        .total-section {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .total-section div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .total-section .total-price {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Free Samples on All Orders | Free Make Up Base on ₹3999 | Free Shipping on ₹999
+    </div>
+    <div class="nav-bar">
+        <div class="logo">ESSENTIAL GLOW</div>
+        <div>
+            <a href="#" class="button">Best Sellers</a>
+            <a href="#" class="button skincare-button">Skincare</a>
+            <a href="#" class="button haircare-button">Haircare</a>
+            <a href="#" class="button lipcare-button">Lipcare</a>
+        </div>
+        <div>
+            <a href="#" id="search-button">🔍</a>
+            <a href="#" id="cart-button">🛒</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="highlight-image"></div>
+    </div>
+    <div class="products">
+        <div class="product">
+            <img src="sunstick.jpg" alt="Thank You Farmer Sun Project Silky Calming Sun Stick SPF50+ PA++++">
+            <h3>Thank You Farmer Sun Stick</h3>
+            <p>Best Korean Sunscreen stick. Suits all skin types. Easy to re-apply</p>
+            <p class="price">₹ 2,399</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="cushion.jpg" alt="Dewytree Urban Shade Cover & Fit Sunscreen Cushion SPF 50+ PA++++">
+            <h3>Dewytree Urban Shade Cover & Fit Sunscreen Cushion SPF 50+ PA++++</h3>
+            <p>First Korean sun cushion sunscreen in India. Protects & conceals.</p>
+            <p class="price">₹ 2,299</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="projectwater.jpg" alt="Thank You Farmer Sun Project Water Sunscreen Cream SPF 50+ PA+++">
+            <h3>Thank You Farmer Sun Project Water Sunscreen Cream SPF 50+ PA+++</h3>
+            <p>Non-sticky Korean sunscreen that protects & hydrates</p>
+            <p class="price">₹ 2,159</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="snaicream.jpg" alt="Dewytree Ultra-Vitalizing Snail Cream">
+            <h3>Dewytree Ultra-Vitalizing Snail Cream</h3>
+            <p>Daily repair cream infused with snail secretion filtrate</p>
+            <p class="price">₹ 2,999</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="herbalism.jpg" alt="Lador Herbalism Shampoo - 150ml">
+            <h3>Lador Herbalism Shampoo - 150ml</h3>
+            <p>Best Korean Shampoo for hair loss relief</p>
+            <p class="price">₹ 999</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="herbalismcond.jpg" alt="Lador Herbalism Treatment (Conditioner) - 150ml">
+            <h3>Lador Herbalism Treatment (Conditioner) - 150ml</h3>
+            <p>Korean conditioner for silky, soft, shiny hair. Best for hairfall.</p>
+            <p class="price">₹ 999</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="wondeerbalm.jpg" alt="Lador Wonder Balm (50 Seconds Moisture + Protein Clinic Treatment)">
+            <h3>Lador Wonder Balm (50 Seconds Moisture + Protein Clinic Treatment)</h3>
+            <p>Works in 50 secs - Intensive protein hair repair, moisturizing treatment</p>
+            <p class="price">₹ 2,199</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="bubbleshamp.jpg" alt="Lador Wonder Bubble Shampoo - 250ml">
+            <h3>Lador Wonder Bubble Shampoo - 250ml</h3>
+            <p>Moisture bomb shampoo for dry and frizzy hair</p>
+            <p class="price">₹ 1,499</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="nighttreat.jpg" alt="Dr. Different VITALIFT-A Night Treatment Cream (0.05% Retinal)">
+            <h3>Dr. Different VITALIFT-A Night Treatment Cream (0.05% Retinal)</h3>
+            <p>Anti-ageing treatment for firm, even-toned, acne-free skin</p>
+            <p class="price">₹ 3,579</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+    </div>
+    <!-- Skincare layout -->
+    <div class="layout skincare-layout">
+        <span class="close-button">✖</span>
+        <div class="layout-products">
+            <div class="layout-product">
+                <img src="cushion.jpg" alt="Dewytree Urban Shade Cover & Fit Sunscreen Cushion SPF 50+ PA++++">
+                <h3>Dewytree Urban Shade Cover & Fit Sunscreen Cushion SPF 50+ PA++++</h3>
+                <p>First Korean sun cushion sunscreen in India. Protects & conceals.</p>
+                <p class="price">₹ 2,299</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="layout-product">
+                <img src="jojoba.jpg" alt="Celimax Derma Nature Fresh Blackhead Jojoba Cleansing Oil">
+                <h3>Celimax Derma Nature Fresh Blackhead Jojoba Cleansing Oil</h3>
+                <p>Dissolves makeup, blackheads for a smooth complexion</p>
+                <p class="price">₹ 1,439</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="layout-product">
+                <img src="toneup.jpg" alt="Celimax Glutathione Tone Up Cream">
+                <h3>Celimax Glutathione Tone Up Cream</h3>
+                <p>Brightens, improves skin tone & reduces dark spots</p>
+                <p class="price">₹ 1,699</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    <!-- Haircare layout -->
+    <div class="layout haircare-layout">
+        <span class="close-button">✖</span>
+        <div class="layout-products">
+            <div class="layout-product">
+                <img src="herbalism.jpg" alt="Lador Herbalism Shampoo - 150ml">
+                <h3>Lador Herbalism Shampoo - 150ml</h3>
+                <p>Best Korean Shampoo for hair loss relief</p>
+                <p class="price">₹ 999</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="layout-product">
+                <img src="herbalismcond.jpg" alt="Lador Herbalism Treatment (Conditioner) - 150ml">
+                <h3>Lador Herbalism Treatment (Conditioner) - 150ml</h3>
+                <p>Korean conditioner for silky, soft, shiny hair. Best for hairfall.</p>
+                <p class="price">₹ 999</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="layout-product">
+                <img src="fillup.jpg" alt="Lador Perfect Hair Fill-Up (Hair Ampoule) - 13ml">
+                <h3>Lador Perfect Hair Fill-Up (Hair Ampoule) - 13ml</h3>
+                <p>Professional Korean hair repair treatment</p>
+                <p class="price">₹ 270</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    <!-- Lipcare layout -->
+    <div class="layout lipcare-layout">
+        <span class="close-button">✖</span>
+        <div class="layout-products">
+            <div class="layout-product">
+                <img src="wondeerbalm.jpg" alt="Lador Wonder Balm (50 Seconds Moisture + Protein Clinic Treatment)">
+                <h3>Lador Wonder Balm (50 Seconds Moisture + Protein Clinic Treatment)</h3>
+                <p>Works in 50 secs - Intensive protein hair repair, moisturizing treatment</p>
+                <p class="price">₹ 2,199</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="layout-product">
+                <img src="cushion.jpg" alt="Dewytree Urban Shade Cover & Fit Sunscreen Cushion SPF 50+ PA++++">
+                <h3>Dewytree Urban Shade Cover & Fit Sunscreen Cushion SPF 50+ PA++++</h3>
+                <p>First Korean sun cushion sunscreen in India. Protects & conceals.</p>
+                <p class="price">₹ 2,299</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="layout-product">
+                <img src="cushion.jpg" alt="Dewytree Urban Shade Cover & Fit Sunscreen Cushion SPF 50+ PA++++">
+                <h3>Dewytree Urban Shade Cover & Fit Sunscreen Cushion SPF 50+ PA++++</h3>
+                <p>First Korean sun cushion sunscreen in India. Protects & conceals.</p>
+                <p class="price">₹ 2,299</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    <!-- Cart layout -->
+    <div class="layout cart-layout">
+        <span class="close-button">✖</span>
+        <div class="cart-products">
+            <!-- Selected products will be displayed here -->
+        </div>
+        <div class="total-section">
+            <div>
+                <span>Actual Price:</span>
+                <span class="actual-price">0</span>
+            </div>
+            <div>
+                <span>Discount Price:</span>
+                <span class="discount-price">0</span>
+            </div>
+            <div>
+                <span>Total Price:</span>
+                <span class="total-price">0</span>
+            </div>
+        </div>
+    </div>
+    <!-- Your other layouts here -->
+    <div class="contact-details">
+        <p>
+            Contact Us: support@essentialgloww.in | 123-456-7890
+        </p>
+    </div>
+    <script>
+        const cartButton = document.getElementById('cart-button');
+        const cartLayout = document.querySelector('.cart-layout');
+        const skincareButton = document.querySelector('.skincare-button');
+        const haircareButton = document.querySelector('.haircare-button');
+        const lipcareButton = document.querySelector('.lipcare-button');
+        const closeButtons = document.querySelectorAll('.close-button');
+        const products = document.querySelectorAll('.add-to-cart');
+
+        cartButton.addEventListener('click', () => {
+            cartLayout.classList.toggle('active');
+            calculateTotal();
+        });
+
+        skincareButton.addEventListener('click', () => {
+            const skincareLayout = document.querySelector('.skincare-layout');
+            skincareLayout.classList.add('active');
+            // Here you can populate the skincare layout with products dynamically
+        });
+
+        haircareButton.addEventListener('click', () => {
+            const haircareLayout = document.querySelector('.haircare-layout');
+            haircareLayout.classList.add('active');
+            // Here you can populate the haircare layout with products dynamically
+        });
+
+        lipcareButton.addEventListener('click', () => {
+            const lipcareLayout = document.querySelector('.lipcare-layout');
+            lipcareLayout.classList.add('active');
+            // Here you can populate the lipcare layout with products dynamically
+        });
+
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                cartLayout.classList.remove('active');
+                document.querySelectorAll('.layout').forEach(layout => {
+                    layout.classList.remove('active');
+                });
+            });
+        });
+
+        products.forEach(product => {
+            product.addEventListener('click', () => {
+                const name = product.getAttribute('data-name');
+                const price = parseFloat(product.getAttribute('data-price'));
+                const img = product.getAttribute('data-img');
+                const desc = product.getAttribute('data-desc');
+
+                // Create elements for the cart item
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.innerHTML = `
+                    <img src="${img}" alt="${name}">
+                    <div>
+                        <h3>${name}</h3>
+                        <p>${desc}</p>
+                        <input type="number" min="1" value="1" class="quantity" data-price="${price}">
+                        <p class="item-price">Price: ₹ ${price}</p>
+                    </div>
+                    <button class="remove-from-cart">Remove</button>
+                `;
+
+                // Append the cart item to the cart layout
+                document.querySelector('.cart-products').appendChild(cartItem);
+
+                calculateTotal();
+            });
+        });
+
+        // Remove item from cart
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('remove-from-cart')) {
+                e.target.parentElement.remove();
+                calculateTotal();
+            }
+        });
+
+        // Calculate total price
+        function calculateTotal() {
+            const items = document.querySelectorAll('.cart-item');
+            let totalPrice = 0;
+            let discountPrice = 0;
+            items.forEach(item => {
+                const quantity = parseFloat(item.querySelector('.quantity').value);
+                const price = parseFloat(item.querySelector('.quantity').getAttribute('data-price'));
+                const itemPrice = quantity * price;
+                totalPrice += itemPrice;
+                discountPrice += price;
+                item.querySelector('.item-price').textContent = `Price: ₹ ${itemPrice.toFixed(2)}`;
+            });
+            const actualPrice = totalPrice.toFixed(2);
+            const total = discountPrice.toFixed(2);
+            const discount = (actualPrice - total).toFixed(2);
+            document.querySelector('.total-price').textContent = `₹ ${total}`;
+            document.querySelector('.actual-price').textContent = `₹ ${actualPrice}`;
+            document.querySelector('.discount-price').textContent = `₹ ${discount}`;
+        }
+    </script>
+</body>
+</html>
